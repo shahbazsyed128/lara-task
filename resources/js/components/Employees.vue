@@ -12,8 +12,9 @@
                            <thead>
                                 <tr>
                                      <th scope="col">#</th>
-                                    <th scope="col"><i class="fas fa-image"></i> Logo</th>
-                                    <th scope="col"><i class="fas fa-building"></i> Employee Name</th>
+                                    <th scope="col"><i class="fas fa-user"></i> First Name</th>
+                                    <th scope="col"><i class="fas fa-user"></i> Last Name</th>
+                                    <th scope="col"><i class="fas fa-building"></i> Company</th>
                                     <th scope="col"><i class="fas fa-at"></i> Email</th>
                                     <th scope="col"><i class="fas fa-link"></i> phone</th>
                                     <th scope="col"><i class="fas fa-history"></i> Registered At</th>
@@ -21,15 +22,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="employee in employees" :key="employee.id">
+                                <tr v-for="employee in employees.data" :key="employee.id">
                                     <td>{{ employee.id}}</td>
-                                    <td><img :src="'storage/'+employee.logo" height="50" width="50" alt=""></td>
-                                    <td>{{ employee.name}}</td>
+                                    <td>{{ employee.first_name}}</td>
+                                    <td>{{ employee.last_name}}</td>
+                                    <td>{{ employee.company.name}}</td>
                                     <td>{{ employee.email}}</td>
-                                    <td><a v-bind:href="`${employee.phone}`" >{{ employee.phone}}</a></td>
+                                    <td>{{ employee.phone}}</td>
                                     <td>{{ employee.created_at | myDate}}</td>      
                                     
                                     <td>
+                                          <router-link :to="{ name: 'employee-view', params: { employee_id: employee.id } }" data-toggle="tooltip" data-placement="top" title="Show"><i class="fa fa-eye text-green"></i></router-link> 
+                                          / 
                                         <a href="#" @click="editModal(employee)">
                                             <i class="fa fa-edit text-blue"></i>
                                         </a>
@@ -39,9 +43,11 @@
                                         </a>
                                     </td>
                                 </tr>
-                                
                             </tbody>
                         </table>
+                    </div>
+                    <div class="card-footer">
+                          <pagination :data="employees" @pagination-change-page="getResults"></pagination>
                     </div>
                 </div>
             </div>
@@ -120,11 +126,17 @@
             }
         },
         methods:{
+            getResults(page = 1) {
+                axios.get('api/employee?page=' + page)
+                    .then(response => {
+                        this.employees = response.data;
+                    });
+            },
             loadCompaines(){
                 axios.get('api/company').then(({data}) =>  this.companies = data.data);
             },
             loadEmployees(){
-                axios.get('api/employee').then(({data}) =>  this.employees = data.data);
+                axios.get('api/employee').then(({data}) =>  this.employees = data);
             },
             createEmployee(){
                 this.$Progress.start()
@@ -179,7 +191,7 @@
                     Fire.$emit('AfterCreate');
                     Swal.fire(
                         'Updated!',
-                        'Your User Info has been Updated.',
+                        'Your Employee Info has been Updated.',
                         'success'
                     )
                     $('#employeeModal').modal('hide')

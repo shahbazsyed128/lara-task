@@ -27,6 +27,8 @@ Vue.component(AlertSuccess.name, AlertSuccess)
 
 Vue.use(VueRouter)
 
+Vue.component('pagination', require('laravel-vue-pagination'));
+
 import VueProgressBar from 'vue-progressbar';
 import Vue from 'vue';
 
@@ -63,6 +65,8 @@ window.Toast = Toast;
 let routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue').default},
     { path: '/companies', component: require('./components/Companies.vue').default},
+    { path: '/company_view', name: 'company-view', props: true, component: require('./components/CompanyView.vue').default },
+    { path: '/employee_view', name: 'employee-view', props: true, component: require('./components/EmployeeView.vue').default },
     { path: '/employees', component: require('./components/Employees.vue').default},
     { path: '/profile', component: require('./components/Profile.vue').default }
   ]

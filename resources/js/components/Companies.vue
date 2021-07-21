@@ -6,7 +6,6 @@
                     <div class="card-header">Companies Component 
                         <button class="btn btn-success float-right" @click="newModal">Add New <i class="fa fa-plus-square"></i></button>
                     </div>
-
                     <div class="card-body">
                        <table class="table table-hover">
                            <thead>
@@ -21,17 +20,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="company in companies" :key="company.id">
+                                <tr v-for="company in companies.data" :key="company.id">
                                     <td>{{ company.id}}</td>
-                                    <td><img :src="'storage/'+company.logo" height="50" width="50" alt=""></td>
+                                    <td><img :src="'storage/'+company.logo" class="rounded-circle" height="30" width="30" alt=""></td>
                                     <td>{{ company.name}}</td>
                                     <td>{{ company.email}}</td>
                                     <td><a v-bind:href="`${company.website}`" >{{ company.website}}</a></td>
                                     <td>{{ company.created_at | myDate}}</td>      
                                     
                                     <td>
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="Show"> <i class="fa fa-eye text-green"></i>
-                                        </a> / 
+                                        <router-link :to="{ name: 'company-view', params: { company_id: company.id } }" data-toggle="tooltip" data-placement="top" title="Show"><i class="fa fa-eye text-green"></i></router-link>
+                                         / 
                                         <a href="#" @click="editModal(company)" data-toggle="tooltip" data-placement="top" title="Edit">
                                             <i class="fa fa-edit text-blue"></i>
                                         </a>
@@ -44,6 +43,9 @@
                                 
                             </tbody>
                         </table>
+                    </div>
+                    <div class="card-footer">
+                        <pagination :data="companies" @pagination-change-page="getResults"></pagination>
                     </div>
                 </div>
             </div>
@@ -123,8 +125,14 @@
             }
         },
         methods:{
+            getResults(page = 1) {
+                axios.get('api/company?page=' + page)
+                    .then(response => {
+                        this.companies = response.data;
+                    });
+            },
             loadCompaines(){
-                axios.get('api/company').then(({data}) =>  this.companies = data.data);
+                axios.get('api/company').then(({data}) =>  this.companies = data);
             },
             createCompany(){
                 this.$Progress.start()
@@ -157,7 +165,7 @@
                             Fire.$emit('AfterCreate');
                             Swal.fire(
                                 'Deleted!',
-                                'Your file has been deleted.',
+                                'Your Company has been deleted.',
                                 'success'
                                 )
                             
@@ -179,7 +187,7 @@
                     Fire.$emit('AfterCreate');
                     Swal.fire(
                         'Updated!',
-                        'Your User Info has been Updated.',
+                        'Your Company Info has been Updated.',
                         'success'
                     )
                     $('#companyModal').modal('hide')

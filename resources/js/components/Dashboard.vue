@@ -6,7 +6,7 @@
                     <div class="card-header">Dashboard Component</div>
 
                     <div class="card-body">
-                        I'm an example component.
+                        Here is Laravel Task Which is Given by  XE POS
                     </div>
                 </div>
             </div>

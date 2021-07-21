@@ -22,7 +22,7 @@ class EmployeeController extends Controller
 
     public function index()
     {
-         return Employee::latest()->paginate(10);
+         return Employee::with('company:id,name')->latest()->paginate(10);
     }
 
     /**
@@ -31,9 +31,9 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEmployeeRequest $request)
     {
-        Company::create([
+        Employee::create([
             'first_name'    => $request['first_name'],
             'last_name'     => $request['last_name'],
             'email'         => $request['email'],
@@ -50,7 +50,8 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        //
+        return Employee::with('company:id,name')->find($id);
+
     }
 
     /**
@@ -60,9 +61,10 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateEmployeeRequest $request, $id)
     {
-        //
+        $employee =  Employee::findOrFail($id); 
+        $employee->update($request->all());
     }
 
     /**
@@ -73,6 +75,8 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $employee =  Employee::findOrFail($id);
+        $employee->delete();
+        return ['message'=>'Employee Deleted'];
     }
 }

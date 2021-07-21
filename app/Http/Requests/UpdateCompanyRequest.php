@@ -28,7 +28,7 @@ class UpdateCompanyRequest extends FormRequest
         $company_table_name = resolve(Company::class)->getTable();
         return [
             'name'      => ['required','string','min:3','max:35'],
-            'email'     => ['required','string',Rule::unique($company_table_name)->ignore($this->request->get('id'))],
+            'email'     => ['email',Rule::unique($company_table_name)->ignore($this->request->get('id'))],
             'website'   => ['url']
         ];
     }

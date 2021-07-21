@@ -37,7 +37,6 @@
                     @guest
                     @else
                         <li class="mx-2 nav-link"><router-link to="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</router-link></li>
-                        <li class="mx-2 nav-link"><router-link to="/profile"><i class="fas fa-user-circle"></i> Profile</router-link></li>
                         <li class="mx-2 nav-link"><router-link to="/companies"><i class="fas fa-building"></i> Companies</router-link></li>
                         <li class="mx-2 nav-link"><router-link to="/employees"><i class="fas fa-briefcase"></i> Employees</router-link></li>
                     @endguest

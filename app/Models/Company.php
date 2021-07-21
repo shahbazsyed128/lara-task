@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Employee;
 
 
 class Company extends Model
@@ -17,4 +18,9 @@ class Company extends Model
         'website',
     ];
 
+
+    public function employee()
+    {
+        return $this->hasMany(Employee::class);
+    }
 }

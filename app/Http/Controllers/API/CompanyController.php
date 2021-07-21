@@ -59,7 +59,7 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        //
+        return Company::with('employee')->find($id);
     }
 
     /**
